@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "auditing"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{A gem to keep track of audit hisory of a record}
+    gem.description = %Q{acts_as_versioned is good. This allows an attribute level rollback instead}
     gem.email = "brad.cantin@gmail.com"
     gem.homepage = "http://github.com/bcantin/auditing"
     gem.authors = ["Brad"]
