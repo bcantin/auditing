@@ -10,15 +10,14 @@ To add auditing to all attributes on a model, simply add auditing to the model.
     auditing
   end
 
-If you want more control over which attributes are auditing, you can define them
+If you want more control over which attributes are audited, you can define them
 by supplying a fields hash
 
   class School < ActiveRecord::Base
     auditing :fields => [:name, :established_on]
   end
   
-Auditing will not track the default attributes that rails provides [:id, :created_at, :updated_at]
-
+Auditing will not track "id", "created_at", or "updated_at" by default
 
 == Note on Patches/Pull Requests
  
