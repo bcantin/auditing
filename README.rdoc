@@ -1,6 +1,24 @@
 = auditing
 
-Description goes here.
+Auditing is a simple way to track and rollback changes to a record.
+
+== Basic Usage
+
+To add auditing to all attributes on a model, simply add auditing to the model.
+
+  class School < ActiveRecord::Base
+    auditing
+  end
+
+If you want more control over which attributes are auditing, you can define them
+by supplying a fields hash
+
+  class School < ActiveRecord::Base
+    auditing :fields => [:name, :established_on]
+  end
+  
+Auditing will not track the default attributes that rails provides [:id, :created_at, :updated_at]
+
 
 == Note on Patches/Pull Requests
  

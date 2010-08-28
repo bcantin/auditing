@@ -18,6 +18,6 @@ ActiveRecord::Base.establish_connection(
 load(File.dirname(__FILE__) + '/schema.rb')
 
 # models used in testing
-class School < ActiveRecord::Base
-  auditing :fields => [:name]
-end
+# class School < ActiveRecord::Base
+#   auditing :fields => [:name]
+# end
