@@ -17,7 +17,8 @@ ActiveRecord::Base.establish_connection(
 # our schema
 load(File.dirname(__FILE__) + '/schema.rb')
 
-# models used in testing
-# class School < ActiveRecord::Base
-#   auditing :fields => [:name]
-# end
+class Audit < ActiveRecord::Base
+  include Auditor::Audit
+  belongs_to :auditable,   :polymorphic => true
+  belongs_to :association, :polymorphic => true
+end

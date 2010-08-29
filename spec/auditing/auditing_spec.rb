@@ -1,20 +1,20 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'spec_helper'
 
 describe "Auditing" do
   
   describe "auditing default values" do
-    before(:each) do
+    before do
       class School < ActiveRecord::Base
         auditing
       end
     end
     
     it "responds to auditing when auditing is added to an AR object" do
-      School.respond_to?(:auditing).should == true
+      School.should respond_to(:auditing)
     end
     
     it "responds to @auditing_fields" do
-      School.respond_to?(:auditing_fields).should == true
+      School.should respond_to(:auditing_fields)
     end
     
     it "has default values when no fields are passed in" do
@@ -52,4 +52,26 @@ describe "Auditing" do
       School.auditing_fields.should == ['name', 'established_on']
     end
   end # auditing :fields => [:foo,:bar]
+  
+  describe "creating a new instance" do
+    before do
+      class School < ActiveRecord::Base
+        auditing
+      end
+    end
+
+    it "creates an audit" do
+      lambda { School.create(:name => 'PS118') }.should change { Audit.count }.by(1)
+    end
+    
+    it "the initial audit has an action of 'Create'" do
+      school = School.create(:name => 'PS118')
+      school.audits.first.action.should == 'Create'
+    end
+    
+    it "the initial audit should not be reversable" do
+      school = School.create(:name => 'PS118')
+      school.audits.first.reversable?.should == false
+    end
+  end
 end
