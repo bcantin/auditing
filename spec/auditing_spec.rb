@@ -2,18 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Auditing" do
   
-  it "responds to auditing when auditing is added to an AR object" do
-    class School < ActiveRecord::Base
-      auditing
-    end
-    School.respond_to?(:auditing).should == true
-  end
-  
   describe "auditing default values" do
     before(:each) do
       class School < ActiveRecord::Base
         auditing
       end
+    end
+    
+    it "responds to auditing when auditing is added to an AR object" do
+      School.respond_to?(:auditing).should == true
     end
     
     it "responds to @auditing_fields" do
@@ -24,7 +21,7 @@ describe "Auditing" do
       School.stub!(:column_names).and_return(["id", "name", "established_on", "created_at", "updated_at"])
       School.gather_fields_for_auditing.should == ["name", "established_on"]
     end
-  end
+  end # auditing default values
 
   describe "auditing :fields => [:foo,:bar]" do
     it "accepts a single valude as a symbol" do
@@ -47,11 +44,12 @@ describe "Auditing" do
       end
       School.auditing_fields.should == ['name', 'established_on']
     end
+    
     it "accepts an array of strings" do
       class School < ActiveRecord::Base
         auditing :fields => ['name', 'established_on']
       end
       School.auditing_fields.should == ['name', 'established_on']
     end
-  end
+  end # auditing :fields => [:foo,:bar]
 end
