@@ -1,10 +1,10 @@
-= auditing (currently in development, no gem has been created yet)
+= auditing (currently in development)
 
 Auditing is a simple way to track and rollback changes to a record.
 
 == Installation
 
-  gem install auditing # NOTE: gem has not been created yet.
+  gem install auditing
   
 You will have to supply a model named Audit in your rails application with the following migration
 
