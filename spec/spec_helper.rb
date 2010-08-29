@@ -18,7 +18,7 @@ ActiveRecord::Base.establish_connection(
 load(File.dirname(__FILE__) + '/schema.rb')
 
 class Audit < ActiveRecord::Base
-  include Auditor::Audit
+  include Auditing::Auditor
   belongs_to :auditable,   :polymorphic => true
   belongs_to :association, :polymorphic => true
 end

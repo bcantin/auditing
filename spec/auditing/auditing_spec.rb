@@ -64,14 +64,58 @@ describe "Auditing" do
       lambda { School.create(:name => 'PS118') }.should change { Audit.count }.by(1)
     end
     
-    it "the initial audit has an action of 'Create'" do
+    it "the first audit has an action of 'created'" do
       school = School.create(:name => 'PS118')
-      school.audits.first.action.should == 'Create'
+      school.audits.first.action.should == 'created'
     end
     
-    it "the initial audit should not be reversable" do
+    it "the first audit should not be reversable" do
       school = School.create(:name => 'PS118')
       school.audits.first.reversable?.should == false
     end
-  end
+  end # creating a new instance
+  
+  describe "updating an existing record" do
+    before do
+      class School < ActiveRecord::Base
+        auditing :fields => 'name'
+      end
+      @school = School.create(:name => 'PS118')
+    end
+    
+    it "creates an audit" do
+      lambda { @school.update_attributes(:name => 'PS99') }.should change { Audit.count }.by(1)
+    end
+    
+    it "the first audit has an action of 'updated" do
+      @school.update_attributes(:name => 'PS99')
+      @school.audits.first.action.should == 'updated'
+    end
+    
+    it "the first audit should be reversable" do
+      @school.update_attributes(:name => 'PS99')
+      @school.audits.first.reversable?.should == true
+    end
+    
+    it "the first audit stored the new value" do
+      @school.update_attributes(:name => 'PS99')
+      @school.audits.first.new_value.should == 'PS99'
+    end
+    
+    it "the first audit stored the old value" do
+      @school.update_attributes(:name => 'PS99')
+      @school.audits.first.old_value.should == 'PS118'
+    end
+    
+    describe "does not create an audit if" do
+      it "a value did not change" do
+        lambda { @school.update_attributes(:name => 'PS118') }.should_not change { Audit.count }
+      end
+      
+      it "a value is not part of auditing_fields" do
+        lambda { @school.update_attributes(:established_on => Time.now) }.should_not change { Audit.count }
+      end
+    end
+  end # updating an existing record
+  
 end
