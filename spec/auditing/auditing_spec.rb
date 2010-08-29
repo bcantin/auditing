@@ -73,6 +73,11 @@ describe "Auditing" do
       school = School.create(:name => 'PS118')
       school.audits.first.reversable?.should == false
     end
+    
+    it "the audit.auditable should be the object that created the audit" do
+      school = School.create(:name => 'PS118')
+      school.audits.first.auditable.should == school
+    end
   end # creating a new instance
   
   describe "updating an existing record" do
@@ -107,7 +112,12 @@ describe "Auditing" do
       @school.audits.first.old_value.should == 'PS118'
     end
     
-    describe "does not create an audit if" do
+    it "the audit.auditable should be the object that created the audit" do
+      @school.update_attributes(:name => 'PS99')
+      @school.audits.first.auditable.should == @school
+    end
+    
+    describe "does not create an audit when" do
       it "a value did not change" do
         lambda { @school.update_attributes(:name => 'PS118') }.should_not change { Audit.count }
       end
