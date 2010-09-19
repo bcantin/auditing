@@ -9,7 +9,7 @@ describe "Auditor" do
   describe "#rollback" do
     before do
       class School < ActiveRecord::Base
-        auditing
+        audit_enabled
       end
       @school = School.create(:name => 'PS118')
       @school.update_attributes(:name => 'PS99')

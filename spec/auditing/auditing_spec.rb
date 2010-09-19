@@ -5,12 +5,12 @@ describe "Auditing" do
   describe "auditing default values" do
     before do
       class School < ActiveRecord::Base
-        auditing
+        audit_enabled
       end
     end
     
-    it "responds to auditing when auditing is added to an AR object" do
-      School.should respond_to(:auditing)
+    it "responds to audit_enabled when auditing is added to an AR object" do
+      School.should respond_to(:audit_enabled)
     end
     
     it "responds to @auditing_fields" do
@@ -23,31 +23,31 @@ describe "Auditing" do
     end
   end # auditing default values
 
-  describe "auditing :fields => [:foo,:bar]" do
+  describe "audit_enabled :fields => [:foo,:bar]" do
     it "accepts a single valude as a symbol" do
       class School < ActiveRecord::Base
-        auditing :fields => :name
+        audit_enabled :fields => :name
       end
       School.auditing_fields.should == ['name']
     end
     
     it "accepts a single value as a string" do
       class School < ActiveRecord::Base
-        auditing :fields => 'name'
+        audit_enabled :fields => 'name'
       end
       School.auditing_fields.should == ['name']
     end
     
     it "accepts an array of symbols" do
       class School < ActiveRecord::Base
-        auditing :fields => [:name, :established_on]
+        audit_enabled :fields => [:name, :established_on]
       end
       School.auditing_fields.should == ['name', 'established_on']
     end
     
     it "accepts an array of strings" do
       class School < ActiveRecord::Base
-        auditing :fields => ['name', 'established_on']
+        audit_enabled :fields => ['name', 'established_on']
       end
       School.auditing_fields.should == ['name', 'established_on']
     end
@@ -56,7 +56,7 @@ describe "Auditing" do
   describe "creating a new instance" do
     before do
       class School < ActiveRecord::Base
-        auditing
+        audit_enabled
       end
     end
 
@@ -83,7 +83,7 @@ describe "Auditing" do
   describe "updating an existing record" do
     before do
       class School < ActiveRecord::Base
-        auditing :fields => 'name'
+        audit_enabled :fields => 'name'
       end
       @school = School.create(:name => 'PS118')
     end

@@ -9,7 +9,7 @@ begin
     gem.description = %Q{acts_as_versioned is good. This allows an attribute level rollback instead}
     gem.email = "brad.cantin@gmail.com"
     gem.homepage = "http://github.com/bcantin/auditing"
-    gem.authors = ["Brad"]
+    gem.authors = ["Brad Cantin"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

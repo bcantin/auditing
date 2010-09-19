@@ -9,6 +9,14 @@ module Auditing
       action
     end
     
+    def old_value
+      Marshal.load(read_attribute(:old_value))
+    end
+    
+    def new_value
+      Marshal.load(read_attribute(:new_value))
+    end
+    
     def rollback
       return unless reversable?
       
