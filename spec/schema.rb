@@ -14,11 +14,21 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end  
   
-  
   create_table :schools, :force => true do |t|
     t.string   :name
     t.datetime :established_on
     t.timestamps
   end
   
+  create_table :cars, :force => true do |t|
+    t.string  :name
+    t.integer :auto_maker_id
+    t.timestamps
+  end
+  
+  create_table :auto_makers, :force => true do |t|
+    t.string :name
+    t.timestamps
+  end
+
 end

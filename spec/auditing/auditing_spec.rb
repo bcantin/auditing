@@ -128,4 +128,73 @@ describe "Auditing" do
     end
   end # updating an existing record
   
+  describe "belongs_to relationships" do
+    before do
+      class Car < ActiveRecord::Base
+        audit_enabled
+        belongs_to :auto_maker
+      end
+      class AutoMaker < ActiveRecord::Base
+        has_many :cars
+      end
+      
+      @car       = Car.create(:name => 'fast car')
+      @automaker = AutoMaker.create(:name => 'maker of fast cars')
+    end
+    
+    it "creates an audit when we add a belongs_to relationship" do
+      lambda { @car.update_attributes(:auto_maker => @automaker) }.should change { Audit.count }.by(1)
+    end
+    
+    describe "our latest audit" do
+      before do
+        @car.update_attributes(:auto_maker => @automaker)
+      end
+      
+      it "the action should be 'updated" do
+        @car.audits.first.action.should == 'updated'
+      end
+      
+      it "new_value should be an id" do
+        @car.audits.first.new_value.should == @automaker.id
+      end
+
+      it "should be reversable" do
+        @car.audits.first.reversable?.should == true
+      end
+    end
+    
+    describe "updating a belongs_to" do
+      before do
+        @new_automaker = AutoMaker.create(:name => 'maker of safe car')
+        @car.update_attributes(:auto_maker => @automaker)
+      end
+      
+      it "creates an audit when we change a belongs_to relationship" do
+        lambda { @car.update_attributes(:auto_maker => @new_automaker) }.should change { Audit.count }.by(1)
+      end
+      
+      describe "our latest audit" do
+        before do
+          @car.update_attributes(:auto_maker => @new_automaker)
+        end
+
+        it "the action should be 'updated" do
+          @car.audits.first.action.should == 'updated'
+        end
+
+        it "new_value should be an id" do
+          @car.audits.first.new_value.should == @new_automaker.id
+        end
+        
+        it "old_value should be an id" do
+          @car.audits.first.old_value.should == @automaker.id
+        end
+        
+        it "should be reversable" do
+          @car.audits.first.reversable?.should == true
+        end
+      end
+    end
+  end
 end
