@@ -1,6 +1,6 @@
 ActiveRecord::Schema.define(:version => 0) do
   
-  create_table :audits, :force => true do |t|
+  create_table :audits do |t|
     t.string  :action
     t.string  :auditable_type
     t.integer :auditable_id
@@ -14,20 +14,38 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end  
   
-  create_table :schools, :force => true do |t|
+  create_table :schools do |t|
     t.string   :name
     t.datetime :established_on
     t.timestamps
   end
   
-  create_table :cars, :force => true do |t|
+  create_table :cars do |t|
     t.string  :name
     t.integer :auto_maker_id
     t.timestamps
   end
   
-  create_table :auto_makers, :force => true do |t|
+  create_table :auto_makers do |t|
     t.string :name
+    t.timestamps
+  end
+  
+  create_table :companies do |t|
+    t.string :name
+    t.timestamps
+  end
+  
+  create_table :people do |t|
+    t.string :first_name
+    t.string :last_name
+    t.timestamps
+  end
+  
+  create_table :phone_numbers do |t|
+    t.string  :number
+    t.string  :phoneable_type
+    t.integer :phoneable_id
     t.timestamps
   end
 

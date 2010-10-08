@@ -1,8 +1,7 @@
 require 'spec_helper'
-# require 'timecop'
 
 describe "Auditor" do
-  it 'adds the Auditable::Auditor module to the Audit class' do
+  it 'adds the Auditing::Auditor module to the Audit class' do
     Audit.new.should respond_to(:show_action)
   end
   
@@ -82,6 +81,5 @@ describe "Auditor" do
       @car.audits.first.old_value.should == @new_automaker.id
       @car.audits.first.new_value.should == @automaker.id
     end
-    
   end
 end

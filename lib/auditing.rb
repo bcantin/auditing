@@ -1,5 +1,5 @@
-require 'auditing/auditing'
+require 'auditing/base'
 require 'auditing/auditor'
 
-ActiveRecord::Base.send(:extend, Auditing)
+ActiveRecord::Base.send(:extend, Auditing::Base)
 ActiveRecord::Base.send(:extend, Auditing::Auditor)
