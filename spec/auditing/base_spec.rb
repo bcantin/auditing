@@ -198,23 +198,4 @@ describe "Auditing" do
     end
   end # belongs_to relationships
   
-  describe "has_many relationships" do
-    before do
-      class Company < ActiveRecord::Base
-        has_many :phone_numbers, :as => :phoneable
-        audit_enabled :fields => :name
-      end
-      class PhoneNumber < ActiveRecord::Base
-        belongs_to :phoneable, :polymorphic => true
-        audit_relationship_enabled :model => Company
-      end
-      
-      @apple = Company.create(:name => 'apple')
-      @ph1   = PhoneNumber.create(:number => '1-800-apple')
-    end
-    
-    it "creates an audit when we add a phonenumber" do
-      
-    end
-  end
 end

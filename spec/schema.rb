@@ -44,9 +44,11 @@ ActiveRecord::Schema.define(:version => 0) do
   
   create_table :phone_numbers do |t|
     t.string  :number
+    t.string  :extension
     t.string  :phoneable_type
     t.integer :phoneable_id
     t.timestamps
   end
+ 
 
 end
