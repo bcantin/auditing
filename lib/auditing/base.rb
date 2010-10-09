@@ -1,6 +1,6 @@
 module Auditing
   module Base
-    
+
     # Auditing creates audit objects for a record.
     #
     # @examples
@@ -36,12 +36,19 @@ module Auditing
         if changed?
           changes.each.select {|k,v| auditing_fields.include?(k)}.each do |field, change|
             next if change[0].to_s == change[1].to_s
-            add_audit(:action     => 'updated', 
+            add_audit(:action     => 'updated',
                       :field_name => field,
-                      :old_value  => Marshal.dump(change[0]), 
+                      :old_value  => Marshal.dump(change[0]),
                       :new_value  => Marshal.dump(change[1]) )
           end
         end
+      end
+
+      def log_association_create(child_object, hash)
+        add_audit(:action      => 'Add',
+                  :association => child_object,
+                  :field_name  => hash[:field],
+                  :new_value   => Marshal.dump(hash[:value]) ) 
       end
 
       private
