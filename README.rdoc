@@ -1,4 +1,4 @@
-= auditing (currently in development)
+= auditing
 
 Auditing is a simple way to track and rollback changes to a record.
 
@@ -70,8 +70,10 @@ to enable a similar type of auditing on the other model(s)
 
 As above, you can supply a :fields hash of which attributes will be logged.
 If your relationship is polymorphic, you can supply an array of classes
-that you :only want to log.
+that you only want to log.
 
+  audit_relationship_enabled :only => [Company, Person]
+  
 == Note on Patches/Pull Requests
  
 * Fork the project.

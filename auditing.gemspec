@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{auditing}
-  s.version = "0.0.2"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Brad"]
-  s.date = %q{2010-08-29}
+  s.authors = ["Brad Cantin"]
+  s.date = %q{2010-10-09}
   s.description = %q{acts_as_versioned is good. This allows an attribute level rollback instead}
   s.email = %q{brad.cantin@gmail.com}
   s.extra_rdoc_files = [
@@ -29,10 +29,12 @@ Gem::Specification.new do |s|
      "VERSION",
      "auditing.gemspec",
      "lib/auditing.rb",
-     "lib/auditing/auditing.rb",
+     "lib/auditing/audit_relationship.rb",
      "lib/auditing/auditor.rb",
-     "spec/auditing/auditing_spec.rb",
+     "lib/auditing/base.rb",
+     "spec/auditing/audit_relationship_spec.rb",
      "spec/auditing/auditor_spec.rb",
+     "spec/auditing/base_spec.rb",
      "spec/schema.rb",
      "spec/spec_helper.rb"
   ]
@@ -42,8 +44,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{A gem to keep track of audit hisory of a record}
   s.test_files = [
-    "spec/auditing/auditing_spec.rb",
+    "spec/auditing/audit_relationship_spec.rb",
      "spec/auditing/auditor_spec.rb",
+     "spec/auditing/base_spec.rb",
      "spec/schema.rb",
      "spec/spec_helper.rb"
   ]
