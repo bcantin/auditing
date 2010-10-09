@@ -82,4 +82,46 @@ describe "Auditor" do
       @car.audits.first.new_value.should == @automaker.id
     end
   end
+  
+  describe "rollback has_many attributes" do
+    before do
+      class Company < ActiveRecord::Base
+        has_many :phone_numbers, :as => :phoneable
+        audit_enabled
+      end
+      class PhoneNumber < ActiveRecord::Base
+        belongs_to :phoneable, :polymorphic => true
+        audit_relationship_enabled
+      end
+      @company = Company.create(:name => 'Apple')
+      @ph      = PhoneNumber.new(:number => '1-800-orange')
+      @company.phone_numbers << @ph
+      @ph.update_attributes(:number => '1-800-call-apple')
+      @audit = @company.audits.first
+    end
+    
+    it "the latest audit should be the audit we want to rollback" do
+      @audit.action.should      == 'updated'
+      @audit.new_value.should   == '1-800-call-apple'
+      @audit.old_value.should   == '1-800-orange'
+      @audit.association.should == @ph
+    end
+    
+    it "performs the rollback" do
+      @audit.rollback
+      @company.reload
+      @company.phone_numbers.first.number.should == '1-800-orange'
+    end
+    
+    it "creates an audit when a rollback is performed" do
+      lambda { @audit.rollback }.should change { Audit.count }.by(1)
+    end
+    
+    it "the latest audit after a rollback should contain the changed values" do
+      @audit.rollback
+      @company.reload
+      @company.audits.first.old_value.should == '1-800-call-apple'
+      @company.audits.first.new_value.should == '1-800-orange'
+    end
+  end
 end

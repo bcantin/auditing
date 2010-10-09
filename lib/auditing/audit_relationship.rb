@@ -29,9 +29,11 @@ module Auditing
       self.audit_enabled_models = gather_models(opts)
       self.field_names          = gather_fields_for_auditing(opts[:fields])
 
-      after_create :audit_relationship_create
+      after_create   :audit_relationship_create
+      before_update  :audit_relationship_update
+      before_destroy :audit_relationship_destroy
     end
-
+  
     def gather_fields_for_auditing(fields=nil)
       poly_array = []
       reflect_on_all_associations(:belongs_to).each do |assoc|
@@ -88,12 +90,37 @@ module Auditing
           return unless send(model).respond_to?('log_association_create')
           field_names.each do |field|
             field_value    = send(field)
+            next unless field_value
             model_instance = send(model)
             model_instance.log_association_create(self, {:field => field,
                                                          :value => field_value})
           end
         end
       end
+      
+      def audit_relationship_update
+        if changed?
+          audit_enabled_models.each do |model|
+            return unless send(model).respond_to?('log_association_update')
+            changes.each.select {|k,v| field_names.include?(k)}.each do |field, change|
+              field_value    = send(field)
+              model_instance = send(model)
+              model_instance.log_association_update(self, {:field     => field,
+                                                           :old_value => change[0], 
+                                                           :new_value => change[1]})
+            end
+          end
+        end
+      end
+      
+      def audit_relationship_destroy
+        audit_enabled_models.each do |model|
+          return unless send(model).respond_to?('log_association_destroy')
+          model_instance = send(model)
+          model_instance.log_association_destroy(self)
+        end
+      end
+      
     end
 
   end

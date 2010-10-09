@@ -45,10 +45,23 @@ module Auditing
       end
 
       def log_association_create(child_object, hash)
-        add_audit(:action      => 'Add',
+        add_audit(:action      => 'added',
                   :association => child_object,
                   :field_name  => hash[:field],
-                  :new_value   => Marshal.dump(hash[:value]) ) 
+                  :new_value   => Marshal.dump(hash[:value]) )
+      end
+
+      def log_association_update(child_object, hash)
+        add_audit(:action      => 'updated',
+                  :association => child_object,
+                  :field_name  => hash[:field],
+                  :old_value   => Marshal.dump(hash[:old_value]),
+                  :new_value   => Marshal.dump(hash[:new_value]) ) 
+      end
+
+      def log_association_destroy(item)
+        add_audit(:action => 'removed', :association => item, :undoable => false)
+        # TODO: update all of this items previous audits to be undoable
       end
 
       private
