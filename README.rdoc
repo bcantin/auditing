@@ -49,6 +49,29 @@ by supplying a fields hash
   
 Auditing will not track "id", "created_at", or "updated_at" by default
 
+== belongs_to relationships
+
+Auditing a belongs_to relationship works by keeping track of the foreign_id attribute. You do
+not need to add anything to the foreign model.
+
+== has_many relationships
+
+You may have the need to keep track of a has_many relationship.  To accomplish this, we have
+to enable a similar type of auditing on the other model(s)
+
+  class Company < ActiveRecord::Base
+    has_many :phone_numbers
+    audit_enabled
+  end
+  class PhoneNumber < ActiveRecord::Base
+    belongs_to :company
+    audit_relationship_enabled
+  end
+
+As above, you can supply a :fields hash of which attributes will be logged.
+If your relationship is polymorphic, you can supply an array of classes
+that you :only want to log.
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
