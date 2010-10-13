@@ -90,12 +90,46 @@ describe "AuditingRelationship" do
       @company = Company.create(:name => 'Apple')
       @person  = Person.create(:first_name => 'Steve')
     end
-    it "adds an audit to both sides of the relationship" do
+    
+    it "adds an audit to the company" do
+      lambda {Employment.create(:person     => @person, 
+                                :company    => @company, 
+                                :start_date => 'yesterdayish')
+      }.should change{@company.audits.count}.by(1)
+    end
+    it "adds an audit to the person" do
+      lambda {Employment.create(:person     => @person, 
+                                :company    => @company, 
+                                :start_date => 'yesterdayish')
+      }.should change{@person.audits.count}.by(1)
+    end
+    it "increases the total audit count" do
       lambda {Employment.create(:person     => @person, 
                                 :company    => @company, 
                                 :start_date => 'yesterdayish')
       }.should change{Audit.count}.by(2)
     end
+    
+    describe "updating" do
+      before do
+        @emp = Employment.create(:person     => @person, 
+                                 :company    => @company, 
+                                 :start_date => 'yesterdayish')
+      end
+      it "increases the audit log for the company" do
+        lambda {@emp.update_attribute(:start_date, 'today')
+        }.should change{@company.audits.count}.by(1)
+      end
+      it "increases the audit log for the person" do
+        lambda {@emp.update_attribute(:start_date, 'today')
+        }.should change{@person.audits.count}.by(1)
+      end
+      it "increases the total audit count" do
+        lambda {@emp.update_attribute(:start_date, 'today')
+        }.should change{Audit.count}.by(2)
+      end
+    end
+
   end
     
 end
