@@ -36,12 +36,6 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
   
-  create_table :people do |t|
-    t.string :first_name
-    t.string :last_name
-    t.timestamps
-  end
-  
   create_table :phone_numbers do |t|
     t.string  :number
     t.string  :extension
@@ -49,6 +43,18 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer :phoneable_id
     t.timestamps
   end
- 
+  
+  create_table :people do |t|
+    t.string :first_name
+    t.string :last_name
+    t.timestamps
+  end
+  
+  create_table :employments do |t|
+    t.integer  :person_id
+    t.integer  :company_id
+    t.string   :start_date
+    t.timestamps
+  end
 
 end

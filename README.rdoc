@@ -23,6 +23,7 @@ You will have to supply a model named Audit in your rails application with the f
   end
   
 If you want to track the user, uncomment the t.integer :user_id above.
+
 TODO: more to follow about tracking the user
 
   class Audit < ActiveRecord::Base

@@ -60,8 +60,11 @@ module Auditing
       end
 
       def log_association_destroy(item)
+        mark_as_undoable = audits.where({:association_id => item.id, :association_type => item.class.to_s})
+        mark_as_undoable.each do |i|
+          i.update_attribute('undoable', false)
+        end
         add_audit(:action => 'removed', :association => item, :undoable => false)
-        # TODO: update all of this items previous audits to be undoable
       end
 
       private
