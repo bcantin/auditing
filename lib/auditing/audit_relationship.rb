@@ -27,14 +27,14 @@ module Auditing
       class_inheritable_accessor :field_names
 
       self.audit_enabled_models = gather_models(opts)
-      self.field_names          = gather_fields_for_auditing(opts[:fields])
+      self.field_names          = gather_assoc_fields_for_auditing(opts[:fields])
 
       after_create   :audit_relationship_create
       before_update  :audit_relationship_update
       before_destroy :audit_relationship_destroy
     end
   
-    def gather_fields_for_auditing(fields=nil)
+    def gather_assoc_fields_for_auditing(fields=nil)
       poly_array = []
       reflect_on_all_associations(:belongs_to).each do |assoc|
         poly_array << assoc.name if assoc.options[:polymorphic]

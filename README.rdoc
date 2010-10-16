@@ -3,7 +3,7 @@
 Auditing is a simple way to track and rollback changes to a record.
 == Sample Project
 
-  http://github.com/bcantin/auditing_project
+http://github.com/bcantin/auditing_project
   
 == Installation
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Auditing" do
+describe "Base" do
 
   describe "auditing default values" do
     before do
@@ -94,7 +94,7 @@ describe "Auditing" do
               }.should change { Audit.count }.by(1)
     end
 
-    it "the first audit has an action of 'updated" do
+    it "the first audit has an action of 'updated'" do
       @school.update_attributes(:name => 'PS99')
       @school.audits.first.action.should == 'updated'
     end
