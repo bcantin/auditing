@@ -10,7 +10,7 @@ begin
     gem.email = "brad.cantin@gmail.com"
     gem.homepage = "http://github.com/bcantin/auditing"
     gem.authors = ["Brad Cantin"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec", ">= 2.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

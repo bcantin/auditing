@@ -48,20 +48,23 @@ describe "AuditingRelationship" do
           @company.phone_numbers << @ph
         end
         it "should add an audit to the parent instance when we update a phone number" do
-          lambda {@ph.update_attributes(:number => '1-800-apple')}.should change{@company.audits.count}
+          lambda {@ph.update_attributes(:number => '1-800-apple')
+                  }.should change{@company.audits.count}
         end
 
         describe "deleting a child_object" do
           it "should add an audit to the parent instance when we delete a phone number" do
             lambda {PhoneNumber.destroy(@ph)}.should change{@company.audits.count}
           end
-          
+
           it "should mark previous audits involving this has_many object so they can not be reversed" do
             ph_id    = @ph.id
             ph_assoc = @ph.class.to_s
-            
+
             PhoneNumber.destroy(@ph)
-            ph_audits = @company.audits.where({:association_id => ph_id, :association_type => ph_assoc})
+            ph_audits = @company.audits.where(
+              {:association_id => ph_id, :association_type => ph_assoc}
+            )
             collection = ph_audits.collect(&:undoable)
             collection.uniq.should == [false]
           end
@@ -69,7 +72,7 @@ describe "AuditingRelationship" do
       end
     end
   end
-  
+
   describe "has_many :through" do
     before do
       class Company < ActiveRecord::Base
@@ -90,46 +93,65 @@ describe "AuditingRelationship" do
       @company = Company.create(:name => 'Apple')
       @person  = Person.create(:first_name => 'Steve')
     end
-    
+
     it "adds an audit to the company" do
-      lambda {Employment.create(:person     => @person, 
-                                :company    => @company, 
+      lambda {Employment.create(:person     => @person,
+                                :company    => @company,
                                 :start_date => 'yesterdayish')
-      }.should change{@company.audits.count}.by(1)
+              }.should change{@company.audits.count}.by(1)
     end
     it "adds an audit to the person" do
-      lambda {Employment.create(:person     => @person, 
-                                :company    => @company, 
+      lambda {Employment.create(:person     => @person,
+                                :company    => @company,
                                 :start_date => 'yesterdayish')
-      }.should change{@person.audits.count}.by(1)
+              }.should change{@person.audits.count}.by(1)
     end
     it "increases the total audit count" do
-      lambda {Employment.create(:person     => @person, 
-                                :company    => @company, 
+      lambda {Employment.create(:person     => @person,
+                                :company    => @company,
                                 :start_date => 'yesterdayish')
-      }.should change{Audit.count}.by(2)
+              }.should change{Audit.count}.by(2)
     end
-    
+
     describe "updating" do
       before do
-        @emp = Employment.create(:person     => @person, 
-                                 :company    => @company, 
+        @emp = Employment.create(:person     => @person,
+                                 :company    => @company,
                                  :start_date => 'yesterdayish')
       end
       it "increases the audit log for the company" do
         lambda {@emp.update_attribute(:start_date, 'today')
-        }.should change{@company.audits.count}.by(1)
+                }.should change{@company.audits.count}.by(1)
       end
       it "increases the audit log for the person" do
         lambda {@emp.update_attribute(:start_date, 'today')
-        }.should change{@person.audits.count}.by(1)
+                }.should change{@person.audits.count}.by(1)
       end
       it "increases the total audit count" do
         lambda {@emp.update_attribute(:start_date, 'today')
-        }.should change{Audit.count}.by(2)
+                }.should change{Audit.count}.by(2)
       end
     end
 
+    describe "deleting" do
+      before do
+        @emp = Employment.create(:person     => @person,
+                                 :company    => @company,
+                                 :start_date => 'yesterdayish')
+      end
+      it "increases the audit log for the company" do
+        lambda {Employment.destroy(@emp)
+                }.should change{@company.audits.count}.by(1)
+      end
+      it "increases the audit log for the person" do
+        lambda {Employment.destroy(@emp)
+                }.should change{@person.audits.count}.by(1)
+      end
+      it "increases the total audit count" do
+        lambda {Employment.destroy(@emp)
+                }.should change{Audit.count}.by(2)
+      end
+    end
   end
-    
+
 end
