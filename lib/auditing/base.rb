@@ -48,15 +48,16 @@ module Auditing
         add_audit(:action      => 'added',
                   :association => child_object,
                   :field_name  => hash[:field],
-                  :new_value   => Marshal.dump(hash[:value]) )
+                  :old_value   => Marshal.dump(nil),
+                  :new_value   => Marshal.dump(hash[:value].to_s) )
       end
 
       def log_association_update(child_object, hash)
         add_audit(:action      => 'updated',
                   :association => child_object,
                   :field_name  => hash[:field],
-                  :old_value   => Marshal.dump(hash[:old_value]),
-                  :new_value   => Marshal.dump(hash[:new_value]) ) 
+                  :old_value   => Marshal.dump(hash[:old_value].to_s),
+                  :new_value   => Marshal.dump(hash[:new_value].to_s) ) 
       end
 
       def log_association_destroy(item)
