@@ -90,7 +90,7 @@ module Auditing
           return unless send(model).respond_to?('log_association_create')
           field_names.each do |field|
             field_value    = send(field)
-            next unless field_value
+            next unless field_value.present?
             model_instance = send(model)
             model_instance.log_association_create(self, {:field => field,
                                                          :value => field_value})

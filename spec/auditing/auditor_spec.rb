@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Auditor" do
   it 'adds the Auditing::Auditor module to the Audit class' do
-    Audit.new.should respond_to(:show_action)
+    Audit.new.should respond_to(:rollback)
   end
 
   describe "#rollback" do

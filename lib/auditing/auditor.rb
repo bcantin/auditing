@@ -5,15 +5,13 @@ module Auditing
       undoable?
     end
     
-    def show_action
-      action
-    end
-    
     def old_value
+      return nil unless read_attribute(:old_value)
       Marshal.load(read_attribute(:old_value))
     end
     
     def new_value
+      return nil unless read_attribute(:new_value)
       Marshal.load(read_attribute(:new_value))
     end
     
