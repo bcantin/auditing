@@ -96,6 +96,19 @@ the audits table, you can add it in another migration
 
   add_column :audits, :user_id, :integer
 
+You will need to add the relationship to the Audit class as well
+
+  class Audit < ActiveRecord::Base
+    belongs_to :user
+  end
+
+If you want to see all the audits for a particular user, you can
+add the has_many relationship to the User model as well
+  
+  class User < ActiveRecord::Base
+    has_many :audits
+  end
+
 Your user class should respond to a class method called current_user 
 and current_user= (some authentication systems do this, others do not).
 
