@@ -77,7 +77,16 @@ If your relationship is polymorphic, you can supply an array of classes
 that you only want to log.
 
   audit_relationship_enabled :only => [Company, Person]
+
+== Testing
+
+To run the tests, first clone this repo, then
+
+  cd auditing
+  bundle
+  rspec spec
   
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
