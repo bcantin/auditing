@@ -9,7 +9,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  :field_name
     t.string  :old_value
     t.string  :new_value
-    # t.integer :user_id
+    t.integer :user_id
     t.boolean :undoable, :default => true
     t.timestamps
   end  
@@ -56,5 +56,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   :start_date
     t.timestamps
   end
-
+  
+  create_table :users do |t|
+    t.string :email
+  end
+  
 end

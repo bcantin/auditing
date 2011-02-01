@@ -70,6 +70,9 @@ module Auditing
 
       private
         def add_audit(hash={})
+          if User.respond_to?(:current_user) && !User.current_user.blank?
+            hash[:user_id] = User.current_user.id
+          end
           Audit.create!({:auditable => self}.merge(hash))
         end
     end # Auditing::InstanceMethods

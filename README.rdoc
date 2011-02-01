@@ -9,7 +9,11 @@ http://github.com/bcantin/auditing_project
 
   gem install auditing
   
-You will have to supply a model named Audit in your rails application with the following migration
+You will have to supply a model named Audit in your rails application 
+
+  rails g model audit
+
+Here is a migration for your audit model following migration
 
   create_table :audits, :force => true do |t|
     t.string  :action
@@ -25,9 +29,9 @@ You will have to supply a model named Audit in your rails application with the f
     t.timestamps
   end
   
-If you want to track the user, uncomment the t.integer :user_id above.
+If you want to track the user, uncomment the t.integer :user_id above.  See the Tracking Users section below.
 
-TODO: more to follow about tracking the user
+Update your Audit class 
 
   class Audit < ActiveRecord::Base
     include Auditing::Auditor
@@ -78,6 +82,57 @@ that you only want to log.
 
   audit_relationship_enabled :only => [Company, Person]
 
+== Tracking Users
+
+NOTE: there is probably a more elegant solution to this,  if you know of
+one, please drop me a line.
+
+NOTE: currently this only works with a model called User. I welcome patches
+to change this.
+
+To track which logged in users have made the changes, you will need to have a 
+user_id column in your audits table.  If you did not add it when you created
+the audits table, you can add it in another migration
+
+  add_column :audits, :user_id, :integer
+
+Your user class should respond to a class method called current_user 
+and current_user= (some authentication systems do this, others do not).
+
+Here is a suggested method
+
+  class User < ActiveRecord::Base
+    
+    def self.current_user=(current_user)
+      @current_user = current_user
+    end
+    
+    def self.current_user
+      @current_user
+    end
+    
+  end
+
+Your ApplicationController should also set the current user so the auditing gem can 
+get the current user properly
+
+  class ApplicationController < ActionController::Base
+  
+    before_filter :set_current_user
+    after_filter  :unser_current_user
+    
+    private
+    
+    def set_current_user
+      User.current_user = current_user
+    end
+    
+    def unset_current_user
+      User.current_user = nil
+    end
+    
+  end
+  
 == Testing
 
 To run the tests, first clone this repo, then
@@ -94,7 +149,8 @@ To run the tests, first clone this repo, then
 * Add tests for it. This is important so I don't break it in a
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+  (if you want to have your own version, that is fine but bump version in 
+  a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright

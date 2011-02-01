@@ -21,3 +21,6 @@ class Audit < ActiveRecord::Base
   belongs_to :auditable,   :polymorphic => true
   belongs_to :association, :polymorphic => true
 end
+
+class User < ActiveRecord::Base
+end

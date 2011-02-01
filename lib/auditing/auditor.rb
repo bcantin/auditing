@@ -28,3 +28,4 @@ module Auditing
     
   end # end Auditing::Auditor
 end
+
