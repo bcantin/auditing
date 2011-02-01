@@ -132,7 +132,7 @@ get the current user properly
   class ApplicationController < ActionController::Base
   
     before_filter :set_current_user
-    after_filter  :unser_current_user
+    after_filter  :unset_current_user
     
     private
     
