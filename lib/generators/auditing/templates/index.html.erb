@@ -1,0 +1,32 @@
+<h2>Audit Log</h2>
+
+<%%= link_to "back to #{@resource.class}", @resource %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field Name</th>
+      <th>Values</th>
+      <th>Created</th>
+      <th>Rollback</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%% @audits.each do |audit| %>
+      <tr>
+        <td>
+          <%%= audit.field_name.humanize if audit.field_name %>
+        </td>
+        <td>
+          <%%= description(audit) %>
+        </td>
+        <td> 
+          <%%= time_ago_in_words(audit.created_at) %> ago
+        </td>
+        <td> 
+          <%%= link_to 'rollback', audit_rollback_path(audit) if audit.reversable? %>
+        </td>
+      </tr>
+    <%% end %>
+  </tbody>
+</table>
