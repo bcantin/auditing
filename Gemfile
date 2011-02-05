@@ -1,7 +1,4 @@
 source "http://rubygems.org"
 
-group :development, :test do
-  gem 'activerecord'
-  gem 'sqlite3-ruby'
-  gem 'rspec'
-end
+# Specify your gem's dependencies in auditing.gemspec
+gemspec

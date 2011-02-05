@@ -1,3 +1,6 @@
+module Auditing
+end
+
 require 'auditing/base'
 require 'auditing/auditor'
 require 'auditing/audit_relationship'

@@ -1,5 +1,5 @@
-if [[ -n "$rvm_environments_path" && -s "$rvm_environments_path/ruby-1.8.7-p302@auditing" ]] ; then
-  \. "$rvm_environments_path/ruby-1.8.7-p302@auditing"
+if [[ -n "$rvm_environments_path" && -s "$rvm_environments_path/ruby-1.9.2-p136@auditing" ]] ; then
+  \. "$rvm_environments_path/ruby-1.9.2-p136@auditing"
 else
-  rvm --create use  "ruby-1.8.7-p302@auditing"
+  rvm --create use  "ruby-1.9.2-p136@auditing"
 fi
