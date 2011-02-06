@@ -9,37 +9,16 @@ http://github.com/bcantin/auditing_project
 
   gem install auditing
   
-You will have to supply a model named Audit in your rails application 
+There is a handy installer in the gem now. To see what it will do
+  
+  rails g auditing:install --help
+  
+and, of course, to use it
 
-  rails g model audit
-
-Here is a migration for your audit model following migration
-
-  create_table :audits, :force => true do |t|
-    t.string  :action
-    t.string  :auditable_type
-    t.integer :auditable_id
-    t.string  :association_type
-    t.integer :association_id
-    t.string  :field_name
-    t.string  :old_value
-    t.string  :new_value
-    # t.integer :user_id
-    t.boolean :undoable, :default => true
-    t.timestamps
-  end
+  rails g auditing:install
   
 If you want to track the user, uncomment the t.integer :user_id above.  See the Tracking Users section below.
 
-Update your Audit class 
-
-  class Audit < ActiveRecord::Base
-    include Auditing::Auditor
-    belongs_to :auditable,   :polymorphic => true
-    belongs_to :association, :polymorphic => true
-  end
-  
-  
 == Basic Usage
 
 To add auditing to all attributes on a model, simply add auditing to the model.
@@ -168,4 +147,4 @@ To run the tests, first clone this repo, then
 
 == Copyright
 
-Copyright (c) 2010 Brad Cantin. See LICENSE for details.
+Copyright (c) 2011 Brad Cantin. See LICENSE for details.
