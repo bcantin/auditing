@@ -137,7 +137,6 @@ To run the tests, first clone this repo, then
     bundle
     rake
 
-
 ## Note on Patches/Pull Requests
  
 * Fork the project.
