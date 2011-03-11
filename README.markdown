@@ -1,68 +1,71 @@
-= auditing
+# auditing
 
 Auditing is a simple way to track and rollback changes to a record.
 
-== Sample Project
+Travis CI : [![Build Status](http://travis-ci.org/bcantin/auditing.png)](http://travis-ci.org/bcantin/auditing)
+
+
+## Sample Project
 
 https://github.com/bcantin/auditing_project
   
-== Installation
+## Installation
 
-  gem install auditing
+    gem install auditing
   
 There is a handy installer in the gem now. To see what it will do
   
-  rails g auditing:install --help
+    rails g auditing:install --help
   
 and, of course, to use it
 
-  rails g auditing:install
+    rails g auditing:install
   
 If you want to track the user, uncomment the t.integer :user_id above.  See the Tracking Users section below.
 
-== Basic Usage
+## Basic Usage
 
 To add auditing to all attributes on a model, simply add auditing to the model.
 
-  class School < ActiveRecord::Base
-    audit_enabled
-  end
+    class School < ActiveRecord::Base
+      audit_enabled
+    end
 
 If you want more control over which attributes are audited, you can define them
 by supplying a fields hash
 
-  class School < ActiveRecord::Base
-    audit_enabled :fields => [:name, :established_on]
-  end
+    class School < ActiveRecord::Base
+      audit_enabled :fields => [:name, :established_on]
+    end
   
 Auditing will not track "id", "created_at", or "updated_at" by default
 
-== belongs_to relationships
+## belongs_to relationships
 
 Auditing a belongs_to relationship works by keeping track of the foreign_id attribute. You do
 not need to add anything to the foreign model.
 
-== has_many relationships
+## has_many relationships
 
 You may have the need to keep track of a has_many relationship.  To accomplish this, we have
 to enable a similar type of auditing on the other model(s)
 
-  class Company < ActiveRecord::Base
-    has_many :phone_numbers
-    audit_enabled
-  end
-  class PhoneNumber < ActiveRecord::Base
-    belongs_to :company
-    audit_relationship_enabled
-  end
+    class Company < ActiveRecord::Base
+      has_many :phone_numbers
+      audit_enabled
+    end
+    class PhoneNumber < ActiveRecord::Base
+      belongs_to :company
+      audit_relationship_enabled
+    end
 
 As above, you can supply a :fields hash of which attributes will be logged.
 If your relationship is polymorphic, you can supply an array of classes
 that you only want to log.
 
-  audit_relationship_enabled :only => [Company, Person]
+    audit_relationship_enabled :only => [Company, Person]
 
-== Tracking Users
+## Tracking Users
 
 NOTE: there is probably a more elegant solution to this,  if you know of
 one, please drop me a line.
@@ -74,68 +77,68 @@ To track which logged in users have made the changes, you will need to have a
 user_id column in your audits table.  If you did not add it when you created
 the audits table, you can add it in another migration
 
-  add_column :audits, :user_id, :integer
+    add_column :audits, :user_id, :integer
 
 You will need to add the relationship to the Audit class as well
 
-  class Audit < ActiveRecord::Base
-    belongs_to :user
-  end
+    class Audit < ActiveRecord::Base
+      belongs_to :user
+    end
 
 If you want to see all the audits for a particular user, you can
 add the has_many relationship to the User model as well
-  
-  class User < ActiveRecord::Base
-    has_many :audits
-  end
+
+    class User < ActiveRecord::Base
+      has_many :audits
+    end
 
 Your user class should respond to a class method called current_user 
 and current_user= (some authentication systems do this, others do not).
 
 Here is a suggested method
 
-  class User < ActiveRecord::Base
-    
-    def self.current_user=(current_user)
-      @current_user = current_user
+    class User < ActiveRecord::Base
+  
+      def self.current_user=(current_user)
+        @current_user = current_user
+      end
+  
+      def self.current_user
+        @current_user
+      end
+  
     end
-    
-    def self.current_user
-      @current_user
-    end
-    
-  end
 
 Your ApplicationController should also set the current user so the auditing gem can 
 get the current user properly
 
-  class ApplicationController < ActionController::Base
+    class ApplicationController < ActionController::Base
+
+      before_filter :set_current_user
+      after_filter  :unset_current_user
   
-    before_filter :set_current_user
-    after_filter  :unset_current_user
-    
-    private
-    
-    def set_current_user
-      User.current_user = current_user
-    end
-    
-    def unset_current_user
-      User.current_user = nil
-    end
-    
-  end
+      private
   
-== Testing
+      def set_current_user
+        User.current_user = current_user
+      end
+  
+      def unset_current_user
+        User.current_user = nil
+      end
+  
+    end
+  
+## Testing
 
 To run the tests, first clone this repo, then
 
-  cd auditing
-  bundle
-  rake
-  
+    cd auditing
+    bundle
+    rake
 
-== Note on Patches/Pull Requests
+
+## Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -146,6 +149,6 @@ To run the tests, first clone this repo, then
   a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+## Copyright
 
 Copyright (c) 2011 Brad Cantin. See LICENSE for details.
