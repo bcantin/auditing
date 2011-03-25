@@ -2,7 +2,7 @@
 
 Auditing is a simple way to track and rollback changes to a record.
 
-Travis CI : [![Build Status](http://travis-ci.org/bcantin/auditing.png)](http://travis-ci.org/bcantin/auditing)
+[![Build Status](http://travis-ci.org/bcantin/auditing.png)](http://travis-ci.org/bcantin/auditing)
 
 ## Sample Project
 
