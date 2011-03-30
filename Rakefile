@@ -1,15 +1,23 @@
-require 'bundler'
-Bundler::GemHelper.install_tasks
+# require 'bundler'
+# Bundler::GemHelper.install_tasks
+
+begin
+  require 'bundler/setup'
+  Bundler::GemHelper.install_tasks
+rescue LoadError
+  puts 'although not required, bundler is recommened for running the tests'
+end
+
 
 task :default => [:test]
 
 task :test do
-  sh "rspec spec"
+  sh "bundle exec rspec spec"
 end
 
 
 # require 'rake'
-# 
+
 # begin
 #   require 'bundler/setup'
 #   Bundler::GemHelper.install_tasks
