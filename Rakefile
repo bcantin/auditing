@@ -1,13 +1,8 @@
-begin
-  require 'bundler/setup'
-  Bundler::GemHelper.install_tasks
-rescue LoadError
-  puts 'although not required, bundler is recommened for running the tests'
-end
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
-# task :default => :spec
+task :default => [:test]
 
-# require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new do |t|
-  t.rspec_opts = ["--color", '--format doc']
+task :test do
+  sh "bundle exec rspec spec"
 end
