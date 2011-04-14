@@ -18,5 +18,7 @@ coverage
 rdoc
 pkg
 
+*.gem
+
 ## PROJECT::SPECIFIC
 test.sqlite3
