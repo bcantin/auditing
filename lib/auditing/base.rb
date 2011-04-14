@@ -68,9 +68,16 @@ module Auditing
         add_audit(:action => 'removed', :association => item, :undoable => false)
       end
 
+      def class_exists?(class_name)
+        klass = Module.const_get(class_name)
+        return klass.is_a?(Class)
+      rescue NameError
+        return false
+      end
+
       private
         def add_audit(hash={})
-          if User.respond_to?(:current_user) && !User.current_user.blank?
+          if class_exists?('User') && User.respond_to?(:current_user) && !User.current_user.blank?
             hash[:user_id] = User.current_user.id
           end
           Audit.create!({:auditable => self}.merge(hash))

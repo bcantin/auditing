@@ -7,8 +7,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  :association_type
     t.integer :association_id
     t.string  :field_name
-    t.string  :old_value
-    t.string  :new_value
+    t.text    :old_value
+    t.text    :new_value
     t.integer :user_id
     t.boolean :undoable, :default => true
     t.timestamps
@@ -60,5 +60,9 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table :users do |t|
     t.string :email
   end
-
+  
+  create_table :specials do |t|
+    t.text :text_field
+  end
+  
 end

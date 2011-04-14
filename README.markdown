@@ -19,8 +19,22 @@ There is a handy installer in the gem now. To see what it will do
 and, of course, to use it
 
     rails g auditing:install
-  
+    rake db:migrate
+    
 If you want to track the user, uncomment the t.integer :user_id above.  See the Tracking Users section below.
+
+
+## Upgrading to 1.3.0
+
+New installs will not need to do this.  Anyone that is using 1.2.2 and belong should 
+
+    gem update auditing
+    # ... updates happen
+    rails g auditing:upgrade
+    rake db:migrate
+    
+This will create a new migration to update the :old_value and :new_value attribute from STRING to TEXT
+
 
 ## Basic Usage
 
