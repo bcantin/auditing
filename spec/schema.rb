@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 0) do
   
   create_table :specials do |t|
     t.text :text_field
+    t.date :date_field
   end
   
 end

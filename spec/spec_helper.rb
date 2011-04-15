@@ -22,5 +22,5 @@ class Audit < ActiveRecord::Base
   belongs_to :association, :polymorphic => true
 end
 
-class User < ActiveRecord::Base
-end
+# class User < ActiveRecord::Base
+# end

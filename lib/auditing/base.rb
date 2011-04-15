@@ -28,18 +28,26 @@ module Auditing
     end
 
     module InstanceMethods
+      # http://stackoverflow.com/questions/1906421/problem-saving-rails-marshal-in-sqlite3-db
+       
+      def dump_data(value)
+        ActiveSupport::Base64.encode64(Marshal.dump(value))
+      end
+       
       def log_creation
         add_audit(:action => 'created', :undoable => false)
       end
-
+     
       def log_update
         if changed?
           changes.each.select {|k,v| auditing_fields.include?(k)}.each do |field, change|
             next if change[0].to_s == change[1].to_s
+
             add_audit(:action     => 'updated',
                       :field_name => field,
-                      :old_value  => Marshal.dump(change[0]),
-                      :new_value  => Marshal.dump(change[1]) )
+                      :old_value  => dump_data(change[0]),
+                      :new_value  => dump_data(change[1]) 
+                      )
           end
         end
       end
@@ -48,16 +56,16 @@ module Auditing
         add_audit(:action      => 'added',
                   :association => child_object,
                   :field_name  => hash[:field],
-                  :old_value   => Marshal.dump(nil),
-                  :new_value   => Marshal.dump(hash[:value].to_s) )
+                  :old_value   => dump_data(nil),
+                  :new_value   => dump_data(hash[:value]) )
       end
 
       def log_association_update(child_object, hash)
         add_audit(:action      => 'updated',
                   :association => child_object,
                   :field_name  => hash[:field],
-                  :old_value   => Marshal.dump(hash[:old_value].to_s),
-                  :new_value   => Marshal.dump(hash[:new_value].to_s) ) 
+                  :old_value   => ( dump_data(hash[:old_value]) if hash[:old_value] ) || dump_data(nil),
+                  :new_value   => dump_data(hash[:new_value]) ) 
       end
 
       def log_association_destroy(item)

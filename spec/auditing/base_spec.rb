@@ -204,48 +204,4 @@ describe "Base" do
     end
   end # belongs_to relationships
 
-  describe "text fields" do
-    before do
-      class Special < ActiveRecord::Base
-        audit_enabled
-      end
-    end
-    
-    it "should properly work on creation" do
-      long_string = 'a'
-      2000.times do
-        long_string << 'b'
-      end
-      special = Special.create(:text_field => long_string)
-      special.audits.should_not be_nil
-    end
-    
-    describe "updating a text field" do
-      before do
-        @long_string     = 'a'
-        @new_long_string = 'c'
-        2000.times do
-          @long_string     << 'b'
-          @new_long_string << 'd'
-        end
-        @special = Special.create(:text_field => @long_string)
-      end
-      
-      it "should create an audit log when we update a text field" do
-        lambda {@special.update_attributes(:text_field => @new_long_string)
-                }.should change { Audit.count }.by(1)
-      end
-      
-      it "should allow access to the old and new values" do
-        @special.update_attributes(:text_field => @new_long_string)
-        audit = @special.audits.first
-        audit.old_value.should eql(@long_string)
-        audit.new_value.should eql(@new_long_string)
-      end
-      
-    end
-    
-    
-  end
-
 end

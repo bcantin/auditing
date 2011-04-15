@@ -7,12 +7,12 @@ module Auditing
     
     def old_value
       return nil unless read_attribute(:old_value)
-      Marshal.load(read_attribute(:old_value))
+      Marshal.load( ActiveSupport::Base64.decode64( read_attribute(:old_value) ) )
     end
     
     def new_value
       return nil unless read_attribute(:new_value)
-      Marshal.load(read_attribute(:new_value))
+      Marshal.load( ActiveSupport::Base64.decode64( read_attribute(:new_value) ) )
     end
     
     def rollback
