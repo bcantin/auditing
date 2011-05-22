@@ -1,6 +1,5 @@
 # TODO
 config (aka => tigre-clint)
-  user (default USER)
   serialization (default ?)
     allow dev to create their own, location should be lib/auditing/serialization
       publish API (load / dump)
@@ -11,8 +10,6 @@ serialization schemes
   Marshal
   other?
   
-initializer
-  add initializer creation to the generator
   
 documentation
   investigate YARD
@@ -22,11 +19,9 @@ documentation
       custom user => MEMBER
       custom serialization => maybe put BASE64 here instead ?
       
-update RAKEFILE as seen in guides.rubygems.org
 
 test all column types with all supported serialization schemes
   use BASE64 to document how to add / test your own
-  
   
 possible screencast about installation / usage ?
 possible opensourceitwith.me/gems/auditing
