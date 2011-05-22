@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'active_record'
 require 'auditing'
 require 'rspec'
+require 'timecop'
 
 # our test database
 TEST_DB = File.join(File.dirname(__FILE__), '..', 'test.sqlite3')
