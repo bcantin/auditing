@@ -8,23 +8,12 @@ rescue LoadError
   puts 'although not required, bundler is recommened for running the tests'
 end
 
-# 
-# task :default => [:test]
-# 
-# task :test do
-#   sh "bundle exec rspec spec"
-# end
 
-# require 'rake/testtask'
+task :default => [:test]
 
-# Rake::TestTask.new do |t|
-#   t.libs << 'spec'
-# end
-
-desc "Run tests"
-task :default => :spec
-
-# task :default => :test
+task :test do
+  sh "bundle exec rspec spec"
+end
 
 
 # require 'rake'
@@ -38,8 +27,8 @@ task :default => :spec
 # 
 # task :default => :spec
 # 
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new do |t|
-  t.rspec_opts = ["--color", '--format doc']
-end
+# require 'rspec/core/rake_task'
+# RSpec::Core::RakeTask.new do |t|
+#   t.rspec_opts = ["--color", '--format doc']
+# end
 # 
