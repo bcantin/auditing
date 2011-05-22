@@ -85,8 +85,10 @@ module Auditing
 
       private
         def add_audit(hash={})
-          if class_exists?('User') && User.respond_to?(:current_user) && !User.current_user.blank?
-            hash[:user_id] = User.current_user.id
+          unless Auditing.report_on.nil?
+            if class_exists?(Auditing.report_on.to_s) && Auditing.report_on.respond_to?(Auditing.report_method.to_sym) && !Auditing.report_on.send(Auditing.report_method.to_sym).blank?
+              hash[:user_id] = Auditing.report_on.send(Auditing.report_method.to_sym).id
+            end
           end
           Audit.create!({:auditable => self}.merge(hash))
         end

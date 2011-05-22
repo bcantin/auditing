@@ -1,4 +1,14 @@
 module Auditing
+  
+  class << self
+    attr_accessor :report_on, :report_method, :serialize_type
+
+    def configure
+      yield self
+      true
+    end
+  end
+  
 end
 
 require 'auditing/base'

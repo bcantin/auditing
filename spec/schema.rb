@@ -61,6 +61,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string :email
   end
   
+  create_table :members do |t|
+    t.string :member_name
+  end
+  
   create_table :specials do |t|
     t.text :text_field
     t.date :date_field
