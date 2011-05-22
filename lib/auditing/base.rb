@@ -28,8 +28,8 @@ module Auditing
     end
 
     module InstanceMethods
+      
       # http://stackoverflow.com/questions/1906421/problem-saving-rails-marshal-in-sqlite3-db
-       
       def dump_data(value)
         ActiveSupport::Base64.encode64(Marshal.dump(value))
       end
@@ -46,8 +46,7 @@ module Auditing
             add_audit(:action     => 'updated',
                       :field_name => field,
                       :old_value  => dump_data(change[0]),
-                      :new_value  => dump_data(change[1]) 
-                      )
+                      :new_value  => dump_data(change[1]) )
           end
         end
       end

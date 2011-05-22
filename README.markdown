@@ -24,7 +24,7 @@ and, of course, to use it
 If you want to track the user, uncomment the t.integer :user_id above.  See the Tracking Users section below.
 
 
-## Upgrading to 1.3.0
+## Upgrading to 1.4.0
 
 New installs will not need to do this.  Anyone that is using 1.2.X and below should upgrade
 

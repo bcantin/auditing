@@ -1,7 +1,7 @@
 module Auditing
   
   class << self
-    attr_accessor :report_on, :report_method, :serialize_type
+    attr_accessor :report_on, :report_method
 
     def configure
       yield self

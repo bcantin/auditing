@@ -10,6 +10,7 @@ Example:
         app/models/audit.rb
         app/views/audits/index.html.erb 
         db/migrate/#{time_stamp}_create_audits.rb
+        config/initializers/auditing.rb
         
     This will modify config/routes.rb with
         match ':resource/:id/audits' => 'audits#index', :as => 'audits'

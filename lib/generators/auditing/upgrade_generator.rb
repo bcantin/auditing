@@ -12,6 +12,10 @@ module Auditing
         migration_template 'update_migration.rb', "db/migrate/update_audits.rb"
       end
 
+      def create_initializer
+        template 'auditing.rb', 'config/initializers/auditing.rb'
+      end
+
       private
 
       def self.next_migration_number(dirname) #:nodoc:

@@ -32,6 +32,10 @@ module Auditing
       def create_migration
         migration_template 'migration.rb', "db/migrate/create_audits.rb"
       end
+      
+      def create_initializer
+        template 'auditing.rb', 'config/initializers/auditing.rb'
+      end
 
       private
 

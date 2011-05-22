@@ -20,7 +20,6 @@ load(File.dirname(__FILE__) + '/schema.rb')
 Auditing.configure do |config|
   config.report_on      = nil
   config.report_method  = nil
-  config.serialize_type = nil
 end
 
 class Audit < ActiveRecord::Base
