@@ -34,6 +34,7 @@ New installs will not need to do this.  Anyone that is using 1.2.X and below sho
     rake db:migrate
     
 This will create a new migration to update the :old_value and :new_value attribute from STRING to TEXT
+It will also create an initializer (see Tracking Users section below)
 
 
 ## Basic Usage
@@ -80,32 +81,58 @@ that you only want to log.
 
 ## Tracking Users
 
-NOTE: there is probably a more elegant solution to this,  if you know of
-one, please drop me a line.
-
-NOTE: currently this only works with a model called User. I welcome patches
-to change this.
-
 To track which logged in users have made the changes, you will need to have a 
 user_id column in your audits table.  If you did not add it when you created
 the audits table, you can add it in another migration
 
     add_column :audits, :user_id, :integer
 
-You will need to add the relationship to the Audit class as well
+To let the auditing gem know which model to attribute the changes to, you will 
+need to do some minor setup.  Edit the config/initializers/auditing.rb file 
+created during the installation.  If you do not have that file, it should 
+look like this...
+
+    Auditing.configure do |config|
+      config.report_on      = nil # User
+      config.report_method  = nil # 'current_user'
+    end
+        
+
+You will need to set the config.report_on to the model you are using.  Most 
+applications use a model called User and a method called 'current_user'. If 
+this is your case, then your config file should be updated to look like this...
+
+    Auditing.configure do |config|
+      config.report_on      = User
+      config.report_method  = 'current_user'
+    end
+
+If your application uses something else, say a model called Member, and you 
+have a method to get the logged in member called 'my_awesome_member' then your
+config file should be updated to look like this...
+
+    Auditing.configure do |config|
+      config.report_on      = Member
+      config.report_method  = 'my_awesome_member'
+    end
+
+You will need to add the relationship to the Audit class and to your User / Member /
+(Insert your custom model here)
 
     class Audit < ActiveRecord::Base
       belongs_to :user
     end
 
-If you want to see all the audits for a particular user, you can
-add the has_many relationship to the User model as well
-
     class User < ActiveRecord::Base
       has_many :audits
     end
 
-Your user class should respond to a class method called current_user 
+You can alter the suggested implementation below to suite your needs.  I am showing
+a model named User and a method called current_user.  
+
+
+
+Your User class should respond to a class method called current_user 
 and current_user= (some authentication systems do this, others do not).
 
 Here is a suggested method
@@ -122,11 +149,10 @@ Here is a suggested method
   
     end
 
-Your ApplicationController should also set the current user so the auditing gem can 
-get the current user properly
+Your ApplicationController should also set the current_user so the auditing gem can 
+get the current_user properly
 
     class ApplicationController < ActionController::Base
-
       before_filter :set_current_user
       after_filter  :unset_current_user
   
@@ -139,7 +165,6 @@ get the current user properly
       def unset_current_user
         User.current_user = nil
       end
-  
     end
   
 ## Testing
