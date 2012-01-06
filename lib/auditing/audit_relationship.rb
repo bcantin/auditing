@@ -23,8 +23,11 @@ module Auditing
     def audit_relationship_enabled(opts={})
       include InstanceMethods
 
-      class_inheritable_accessor :audit_enabled_models
-      class_inheritable_accessor :field_names
+      # class_inheritable_accessor :audit_enabled_models
+      # class_inheritable_accessor :field_names
+
+      class_attribute :audit_enabled_models
+      class_attribute :field_names
 
       self.audit_enabled_models = gather_models(opts)
       self.field_names          = gather_assoc_fields_for_auditing(opts[:fields])

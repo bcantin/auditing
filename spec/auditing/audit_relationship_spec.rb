@@ -63,7 +63,7 @@ describe "AuditingRelationship" do
 
             PhoneNumber.destroy(@ph)
             ph_audits = @company.audits.where(
-              {:association_id => ph_id, :association_type => ph_assoc}
+              {:audit_assoc_id => ph_id, :audit_assoc_type => ph_assoc}
             )
             collection = ph_audits.collect(&:undoable)
             collection.uniq.should == [false]

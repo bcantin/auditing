@@ -12,7 +12,8 @@ module Auditing
     #   end
     def audit_enabled(opts={})
       include InstanceMethods
-      class_inheritable_accessor :auditing_fields
+
+      class_attribute :auditing_fields
 
       has_many :audits, :as => :auditable, :order => 'created_at DESC, id DESC'
 
@@ -53,7 +54,7 @@ module Auditing
 
       def log_association_create(child_object, hash)
         add_audit(:action      => 'added',
-                  :association => child_object,
+                  :audit_assoc => child_object,
                   :field_name  => hash[:field],
                   :old_value   => dump_data(nil),
                   :new_value   => dump_data(hash[:value]) )
@@ -61,18 +62,18 @@ module Auditing
 
       def log_association_update(child_object, hash)
         add_audit(:action      => 'updated',
-                  :association => child_object,
+                  :audit_assoc => child_object,
                   :field_name  => hash[:field],
                   :old_value   => ( dump_data(hash[:old_value]) if hash[:old_value] ) || dump_data(nil),
                   :new_value   => dump_data(hash[:new_value]) ) 
       end
 
       def log_association_destroy(item)
-        mark_as_undoable = audits.where({:association_id => item.id, :association_type => item.class.to_s})
+        mark_as_undoable = audits.where({:audit_assoc_id => item.id, :audit_assoc_type => item.class.to_s})
         mark_as_undoable.each do |i|
           i.update_attribute('undoable', false)
         end
-        add_audit(:action => 'removed', :association => item, :undoable => false)
+        add_audit(:action => 'removed', :audit_assoc => item, :undoable => false)
       end
 
       def class_exists?(class_name)
@@ -83,14 +84,16 @@ module Auditing
       end
 
       private
-        def add_audit(hash={})
-          unless Auditing.report_on.nil?
-            if class_exists?(Auditing.report_on.to_s) && Auditing.report_on.respond_to?(Auditing.report_method.to_sym) && !Auditing.report_on.send(Auditing.report_method.to_sym).blank?
-              hash[:user_id] = Auditing.report_on.send(Auditing.report_method.to_sym).id
-            end
+
+      def add_audit(hash={})
+        unless Auditing.report_on.nil?
+          if class_exists?(Auditing.report_on.to_s) && Auditing.report_on.respond_to?(Auditing.report_method.to_sym) && !Auditing.report_on.send(Auditing.report_method.to_sym).blank?
+            hash[:user_id] = Auditing.report_on.send(Auditing.report_method.to_sym).id
           end
-          Audit.create!({:auditable => self}.merge(hash))
         end
+        Audit.create({:auditable => self}.merge(hash))
+      end
+
     end # Auditing::InstanceMethods
 
   end

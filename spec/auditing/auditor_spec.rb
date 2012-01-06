@@ -1,8 +1,52 @@
 require 'spec_helper'
 
 describe "Auditor" do
+
+  before do
+    Audit.destroy_all
+  end
+
   it 'adds the Auditing::Auditor module to the Audit class' do
     Audit.new.should respond_to(:rollback)
+  end
+
+  it "can save an audit that has no data" do
+    a = Audit.create
+    a.should be_valid
+  end
+
+  it "can add an audit thru the association" do
+    class School < ActiveRecord::Base
+      has_many :audits, :as => :auditable #, :order => 'created_at DESC, id DESC'
+    end
+    school = School.create!(:name => 'PS118')
+    school.audits.create!(:action => 'created', :undoable => false)
+    Audit.count.should eql(1)
+  end
+
+  it "can save an using audit_enabled" do
+    class School < ActiveRecord::Base
+      audit_enabled
+    end
+    school = School.create!(:name => 'PS118')
+    Audit.count.should eql(1)
+  end
+
+  it "can update" do
+    class School < ActiveRecord::Base
+      audit_enabled
+    end
+    school = School.create(:name => 'PS118')
+    school.update_attributes(:name => 'PS99')
+
+    Audit.count.should eql(2)
+    school.audits.count.should eql(2)
+    
+    audit = school.audits.first
+    audit.action.should      == 'updated'
+    audit.new_value.should   == 'PS99'
+    audit.old_value.should   == 'PS118'
+    audit.audit_assoc.should be_nil
   end
 
   describe "#rollback" do
@@ -19,7 +63,7 @@ describe "Auditor" do
       @audit.action.should      == 'updated'
       @audit.new_value.should   == 'PS99'
       @audit.old_value.should   == 'PS118'
-      @audit.association.should == nil
+      @audit.audit_assoc.should == nil
     end
 
     it "performs the rollback" do
@@ -61,7 +105,7 @@ describe "Auditor" do
       @audit.action.should      == 'updated'
       @audit.new_value.should   == @new_automaker.id
       @audit.old_value.should   == @automaker.id
-      @audit.association.should == nil
+      @audit.audit_assoc.should == nil
       @car.auto_maker.should    == @new_automaker
     end
 
@@ -104,7 +148,7 @@ describe "Auditor" do
       @audit.action.should      == 'updated'
       @audit.new_value.should   == '1-800-call-apple'
       @audit.old_value.should   == '1-800-orange'
-      @audit.association.should == @ph
+      @audit.audit_assoc.should == @ph
     end
 
     it "performs the rollback" do

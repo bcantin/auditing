@@ -4,8 +4,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string  :action
     t.string  :auditable_type
     t.integer :auditable_id
-    t.string  :association_type
-    t.integer :association_id
+    t.string  :audit_assoc_type
+    t.integer :audit_assoc_id
     t.string  :field_name
     t.text    :old_value
     t.text    :new_value
