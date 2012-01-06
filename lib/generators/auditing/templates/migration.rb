@@ -4,8 +4,8 @@ class CreateAudits < ActiveRecord::Migration
       t.string  :action
       t.string  :auditable_type
       t.integer :auditable_id
-      t.string  :association_type
-      t.integer :association_id
+      t.string  :audit_assoc_type
+      t.integer :audit_assoc_id
       t.string  :field_name
       t.text    :old_value
       t.text    :new_value
@@ -15,7 +15,7 @@ class CreateAudits < ActiveRecord::Migration
     end
     
     add_index :audits, [:auditable_type, :auditable_id]
-    add_index :audits, [:association_type, :association_id]
+    add_index :audits, [:audit_assoc_type, :audit_assoc_id]
   end
 
   def self.down

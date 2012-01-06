@@ -5,7 +5,7 @@ module AuditsHelper
     when 'created'
       "Created Record #{audit.auditable_type}"
     when 'updated'
-      if audit.association.blank?
+      if audit.audit_assoc.blank?
         if audit.field_name.match(/_id$/)
           "Old: #{get_belongs_to(audit, audit.old_value)} <br/>" +
           "New: #{get_belongs_to(audit, audit.new_value)}"
@@ -62,8 +62,8 @@ module AuditsHelper
 
   def get_belongs_to(audit, value)
     return nil unless value
-    if audit.association
-      klass = audit.association.class.reflect_on_association(audit.field_name.gsub(/_id$/,'').to_sym).class_name.constantize
+    if audit.audit_assoc
+      klass = audit.audit_assoc.class.reflect_on_association(audit.field_name.gsub(/_id$/,'').to_sym).class_name.constantize
     else
       klass = audit.auditable.class.reflect_on_association(audit.field_name.gsub(/_id$/,'').to_sym).class_name.constantize
     end

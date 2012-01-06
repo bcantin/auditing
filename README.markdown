@@ -188,4 +188,4 @@ To run the tests, first clone this repo, then
 
 ## Copyright
 
-Copyright (c) 2011 Brad Cantin. See LICENSE for details.
+Copyright (c) 2012 Brad Cantin. See LICENSE for details.
