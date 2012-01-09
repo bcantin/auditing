@@ -37,6 +37,12 @@ This will create a new migration to update the :old_value and :new_value attribu
 It will also create an initializer (see Tracking Users section below)
 
 
+## Current master branch is in review for rails 3.1.x 
+
+Please note that the current master branch is being updated to work with
+Rails 3.1.x  The latest release of auditing should work with rails 3.0.x  As
+always, please report any bugs
+
 ## Basic Usage
 
 To add auditing to all attributes on a model, simply add auditing to the model.
