@@ -32,7 +32,9 @@ module Auditing
       
       # http://stackoverflow.com/questions/1906421/problem-saving-rails-marshal-in-sqlite3-db
       def dump_data(value)
-        ActiveSupport::Base64.encode64(Marshal.dump(value))
+        # ActiveSupport::Base64.encode64(Marshal.dump(value))
+        Base64.encode64(Marshal.dump(value))
+
       end
        
       def log_creation

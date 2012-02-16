@@ -8,7 +8,9 @@ module Auditing
     def old_value
       attributes = attributes_before_type_cast
       if attributes["old_value"]
-        Marshal.load( ActiveSupport::Base64.decode64( read_attribute(:old_value) ) )
+        # Marshal.load( ActiveSupport::Base64.decode64( read_attribute(:old_value) ) )
+        Marshal.load( Base64.decode64( read_attribute(:old_value) ) )
+
       else
         nil
       end
@@ -20,7 +22,9 @@ module Auditing
     def new_value
       attributes = attributes_before_type_cast
       if attributes["new_value"]
-        Marshal.load( ActiveSupport::Base64.decode64( read_attribute(:new_value) ) )
+        # Marshal.load( ActiveSupport::Base64.decode64( read_attribute(:new_value) ) )
+        Marshal.load( Base64.decode64( read_attribute(:new_value) ) )
+
       else
         nil
       end
